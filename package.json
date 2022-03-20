@@ -1,0 +1,28 @@
+{
+  "name": "fullstack2022-osa13",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev":"nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TuuliTG/Fullstack2022-osa13.git"
+  },
+  "author": "Tuuli Toivanen-Gripentrog",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TuuliTG/Fullstack2022-osa13/issues"
+  },
+  "homepage": "https://github.com/TuuliTG/Fullstack2022-osa13#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.11.0",
+    "nodemon": "^2.0.15"
+  }
+}
