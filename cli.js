@@ -16,20 +16,23 @@ const main = async () => {
   try {
     await sequelize.authenticate()
     console.log('Connection has been established successfully.')
-    //sequelize.close()
+    printBlogs()
+    sequelize.close()
   } catch (error) {
     console.error('Unable to connect to the database:', error)
   }
 }
 
-app.get('/api/blogs', async (req, res) => {
+const printBlogs = async () => {
     const blogs = await sequelize.query("SELECT * FROM blogs", { type: QueryTypes.SELECT })
-    res.json(blogs)
-  })
-  
-  const PORT = process.env.PORT || 3001
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-  })
-
+    for (let index = 0; index < blogs.length; index++) {
+        const blog = blogs[index]
+        console.log(`${blog.author}: "${blog.title}", ${blog.likes} likes`)
+    }
+}
 main()
+
+
+
+
+
