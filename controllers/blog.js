@@ -1,5 +1,6 @@
 const router = require('express').Router()
 require('express-async-errors')
+const { Op } = require('sequelize');
 
 const { Blog, User } = require('../models')
 
@@ -9,11 +10,26 @@ const blogFinder = async (req, res, next) => {
 }
 
 router.get('', async (req, res) => {
-    const blogs = await Blog.findAll({
-        include: {
-            model: User
-        }
-    })
+    console.log(req.query)
+    let blogs
+    if(req.query.search){
+        blogs = await Blog.findAll({
+            where: {
+                title: {
+                    [Op.iLike]:'%' + req.query.search + '%'
+                }
+            },
+            include: {
+                model: User
+            }
+        })
+    } else {
+        blogs = await Blog.findAll({
+            include: {
+                model: User
+            }
+        })
+    }
     res.json(blogs)
 })
 
