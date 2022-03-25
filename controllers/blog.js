@@ -14,6 +14,9 @@ router.get('', async (req, res) => {
     let blogs
     if(req.query.search){
         blogs = await Blog.findAll({
+            order: [
+                ['likes', 'DESC']
+            ],
             where: {
                 [Op.or]: {
                     title: {
@@ -31,6 +34,9 @@ router.get('', async (req, res) => {
         })
     } else {
         blogs = await Blog.findAll({
+            order: [
+                ['likes', 'DESC']
+            ],
             include: {
                 model: User
             }
