@@ -15,8 +15,6 @@ router.get('', async (req, res) => {
 
 router.post('', async (req, res) => {
     const user = req.user
-    console.log('creating blog for',user)
-    console.log('userId', user.id)
     const {author, url, title} = req.body
     const blog = await Blog.create({
         author: author,
@@ -27,14 +25,22 @@ router.post('', async (req, res) => {
     res.json(blog)
 })
 
-router.delete('/:id', async (req, res) => {    
-    const id = req.params.id
-    await Blog.destroy({
-        where: {
-            id: id
-        }
-    })
-    res.status(204).end()
+router.delete('/:id', blogFinder,async (req, res) => {    
+    const user = req.user
+    const blog = req.blog
+    console.log('userId',user.id)
+    console.log('blog user id', blog.userId)
+    if (user && blog.userId === user.id) {
+        const id = req.params.id
+        await Blog.destroy({
+            where: {
+                id: id
+            }
+        })
+        res.status(204).end()
+    } else {
+        res.status(404).end()
+    }
 })
 
 router.put('/:id', blogFinder,async (req, res)=> {
