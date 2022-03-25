@@ -2,6 +2,8 @@
 const express = require('express')
 const app = express()
 
+const middleware = require('./util/middleware')
+
 const { PORT } = require('./util/config')
 const { connectToDatabase } = require('./util/db')
 
@@ -11,7 +13,7 @@ const loginRouter = require('./controllers/login')
 
 app.use(express.json())
 
-app.use('/api/blogs', blogsRouter)
+app.use('/api/blogs', middleware.userExtractor,blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 

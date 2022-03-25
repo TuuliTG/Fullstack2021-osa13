@@ -14,7 +14,16 @@ router.get('', async (req, res) => {
 })
 
 router.post('', async (req, res) => {
-    const blog = await Blog.create(req.body)
+    const user = req.user
+    console.log('creating blog for',user)
+    console.log('userId', user.id)
+    const {author, url, title} = req.body
+    const blog = await Blog.create({
+        author: author,
+        url: url,
+        title: title,
+        userId:user.id
+    })
     res.json(blog)
 })
 
