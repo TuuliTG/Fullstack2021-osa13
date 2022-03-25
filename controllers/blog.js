@@ -6,7 +6,7 @@ const { Blog } = require('../models')
 const blogFinder = async (req, res, next) => {
     req.blog = await Blog.findByPk(req.params.id)
     next()
-  }
+}
 
 router.get('', async (req, res) => {
     const blogs = await Blog.findAll()
@@ -16,9 +16,6 @@ router.get('', async (req, res) => {
 router.post('', async (req, res) => {
     const blog = await Blog.create(req.body)
     res.json(blog)
-
-    console.log('error in post')
-    return res.status(400).json({ error })
 })
 
 router.delete('/:id', async (req, res) => {    
@@ -32,7 +29,7 @@ router.delete('/:id', async (req, res) => {
 })
 
 router.put('/:id', blogFinder,async (req, res)=> {
-    if(req.blog) {
+    if (req.blog) {
         req.blog.likes = req.body.likes
         await req.blog.save()
         res.json(req.blog)
