@@ -1,4 +1,5 @@
 const router = require('express').Router()
+require('express-async-errors')
 
 const { Blog } = require('../models')
 
@@ -8,39 +9,26 @@ const blogFinder = async (req, res, next) => {
   }
 
 router.get('', async (req, res) => {
-    try{
     const blogs = await Blog.findAll()
     res.json(blogs)
-    } catch(error) {
-        console.log('error in get')
-        return res.status(400).json({ error })
-    }
 })
 
 router.post('', async (req, res) => {
-    try {
-        const blog = await Blog.create(req.body)
-        res.json(blog)
-    } catch(error) {
-        console.log('error in post')
-        return res.status(400).json({ error })
-    }
-    
+    const blog = await Blog.create(req.body)
+    res.json(blog)
+
+    console.log('error in post')
+    return res.status(400).json({ error })
 })
 
 router.delete('/:id', async (req, res) => {    
     const id = req.params.id
-    try {
-        await Blog.destroy({
-            where: {
-                id: id
-            }
-        })
-        res.status(204).end()
-    } catch(error) {
-        console.log('error in delete')
-        return res.status(400).json({ error })
-    }
+    await Blog.destroy({
+        where: {
+            id: id
+        }
+    })
+    res.status(204).end()
 })
 
 router.put('/:id', blogFinder,async (req, res)=> {
