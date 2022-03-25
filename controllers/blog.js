@@ -15,9 +15,15 @@ router.get('', async (req, res) => {
     if(req.query.search){
         blogs = await Blog.findAll({
             where: {
-                title: {
-                    [Op.iLike]:'%' + req.query.search + '%'
+                [Op.or]: {
+                    title: {
+                        [Op.iLike]:'%' + req.query.search + '%'
+                    },
+                    author: {
+                        [Op.iLike]:'%' + req.query.search + '%'
+                    }
                 }
+                
             },
             include: {
                 model: User
