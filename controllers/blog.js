@@ -47,12 +47,13 @@ router.get('', async (req, res) => {
 
 router.post('', async (req, res) => {
     const user = req.user
-    const {author, url, title} = req.body
+    const {author, url, title, year} = req.body
     const blog = await Blog.create({
         author: author,
         url: url,
         title: title,
-        userId:user.id
+        userId:user.id,
+        year: year
     })
     res.json(blog)
 })
