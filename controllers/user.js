@@ -1,13 +1,23 @@
 const router = require('express').Router()
 require('express-async-errors')
-const { User, Blog } = require('../models')
+const { User, Blog, ReadingList, BlogsList} = require('../models')
 
 const userFinder = async (req, res, next) => {
-    req.user = await User.findAll({
-        where: {username: req.params.username},
-        include: {
-            model: Blog
-        }
+    req.user = await User.findByPk(req.params.id, {
+        attributes:['username', 'name'],
+        include: [{
+            model: ReadingList,
+            attributes:['userId'],
+            include: {
+                model: Blog,
+                as: 'readings',
+                attributes:['author','url', 'title','likes','year'],
+                through: {
+                    attributes: []
+                }
+            },
+            
+        }]
     })
     next()
 }
@@ -26,7 +36,7 @@ router.post('/', async (req, res) => {
     res.json(user)
 })
 
-router.get('/:username', userFinder, async (req, res) => {
+router.get('/:id', userFinder, async (req, res) => {
   if (req.user) {
     res.json(req.user)
   } else {
@@ -34,7 +44,7 @@ router.get('/:username', userFinder, async (req, res) => {
   }
 })
 
-router.put('/:username', userFinder, async (req, res) => {
+router.put('/:id', userFinder, async (req, res) => {
     if (req.user) {
         req.user[0].name = req.body.name
         await req.user[0].save()

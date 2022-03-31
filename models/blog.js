@@ -28,8 +28,7 @@ Blog.init({
     validate: {
       min: 1991,
       max: parseInt(new Date().getFullYear())
-  },
-  
+    },
   }
 }, {
   sequelize,
