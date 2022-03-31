@@ -3,22 +3,45 @@ require('express-async-errors')
 const { User, Blog, ReadingList, BlogsList} = require('../models')
 
 const userFinder = async (req, res, next) => {
-    req.user = await User.findByPk(req.params.id, {
-        attributes:['username', 'name'],
-        include: [{
-            model: ReadingList,
-            attributes:['userId'],
-            include: {
-                model: Blog,
-                as: 'readings',
-                attributes:['author','url', 'title','likes','year'],
-                through: {
-                    attributes: ['read', 'id']
-                }
-            },
-            
-        }]
-    })
+    if(req.query.read) {
+        req.user = await User.findByPk(req.params.id, {
+            attributes:['username', 'name'],
+            include: [{
+                model: ReadingList,
+                attributes:['userId'],
+                include: {
+                    model: Blog,
+                    as: 'readings',
+                    attributes:['author','url', 'title','likes','year'],
+                    through: {
+                        attributes: ['read', 'id'],
+                        where: {
+                            read: req.query.read
+                        }
+                    },
+                    
+                },
+                
+            }]
+        })
+    } else {
+        req.user = await User.findByPk(req.params.id, {
+            attributes:['username', 'name'],
+            include: [{
+                model: ReadingList,
+                attributes:['userId'],
+                include: {
+                    model: Blog,
+                    as: 'readings',
+                    attributes:['author','url', 'title','likes','year'],
+                    through: {
+                        attributes: ['read', 'id']
+                    }
+                },
+                
+            }]
+        })
+    }
     next()
 }
 
