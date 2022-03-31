@@ -1,6 +1,6 @@
 const router = require('express').Router()
 require('express-async-errors')
-const { Op } = require('sequelize');
+const { Op } = require('sequelize')
 
 const { Blog, User } = require('../models')
 

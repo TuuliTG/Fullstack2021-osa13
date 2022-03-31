@@ -1,5 +1,6 @@
 const router = require('express').Router()
 require('express-async-errors')
+const { Op } = require('sequelize')
 
 const { ReadingList, BlogsList } = require('../models')
 
@@ -30,6 +31,30 @@ router.post('', readingListFinder,async (req, res) => {
         readingListId: readingListId
     })
     res.json(blogList)
+})
+
+router.put('/:id', async (req, res) => {
+  const user = req.user
+  if(user){
+    const list = await ReadingList.findOne({where: {userId: user.id}})
+    if(list) {
+        const bloglist = await BlogsList.findOne({
+            where: {
+                [Op.and]: {
+                    readingListId: list.id,
+                    blogId: req.params.id
+                }
+            }
+        })
+        if(bloglist) {
+            bloglist.read = req.body.read
+            await bloglist.save()
+            res.json(bloglist)
+        } else {
+            res.status(404).end()
+        }
+    }
+  }
 })
 
 module.exports = router

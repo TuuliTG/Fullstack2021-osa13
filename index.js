@@ -19,7 +19,7 @@ app.use('/api/blogs', middleware.userExtractor,blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/authors', authorsRouter)
-app.use('/api/readinglist', readingListRouter)
+app.use('/api/readinglist', middleware.userExtractor,readingListRouter)
 
 const start = async () => {
   await connectToDatabase()
