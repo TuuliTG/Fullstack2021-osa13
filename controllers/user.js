@@ -13,7 +13,7 @@ const userFinder = async (req, res, next) => {
                 as: 'readings',
                 attributes:['author','url', 'title','likes','year'],
                 through: {
-                    attributes: []
+                    attributes: ['read', 'id']
                 }
             },
             
