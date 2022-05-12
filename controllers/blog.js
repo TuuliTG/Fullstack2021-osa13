@@ -61,8 +61,6 @@ router.post('', async (req, res) => {
 router.delete('/:id', blogFinder,async (req, res) => {    
     const user = req.user
     const blog = req.blog
-    console.log('userId',user.id)
-    console.log('blog user id', blog.userId)
     if (user && blog.userId === user.id) {
         const id = req.params.id
         await Blog.destroy({
@@ -72,7 +70,7 @@ router.delete('/:id', blogFinder,async (req, res) => {
         })
         res.status(204).end()
     } else {
-        res.status(404).end()
+        res.status(403).end()
     }
 })
 

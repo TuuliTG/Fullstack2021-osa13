@@ -15,17 +15,13 @@ router.post('', readingListFinder,async (req, res) => {
     let readingList
 
     if(!req.readingList) {
-        console.log('no reading list found, creating list');
+        console.log('no reading list found, creating list')
         
         readingList = await ReadingList.create({
             userId: user_id
         })
     }
-    const readingListId = req.readingList === null ? readingList.id : req.readingList.id
-    console.log('readingListId', readingListId);
-    console.log('Blog id', blog_id);
-    
-    
+    const readingListId = req.readingList === null ? readingList.id : req.readingList.id    
     const blogList = await BlogsList.create({
         blogId: blog_id,
         readingListId: readingListId
@@ -35,6 +31,7 @@ router.post('', readingListFinder,async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   const user = req.user
+  
   if(user){
     const list = await ReadingList.findOne({where: {userId: user.id}})
     if(list) {
@@ -54,6 +51,8 @@ router.put('/:id', async (req, res) => {
             res.status(404).end()
         }
     }
+  } else {
+    res.status(403).end()
   }
 })
 
